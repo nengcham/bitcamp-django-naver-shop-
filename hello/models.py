@@ -3,7 +3,8 @@ import random
 def main():
     while 1:
         menu = input('0.Exit 1.Calculator 2.BMI 3.Grade 5.주사위 7.랜덤 이름 뽑기'+'\n'
-                     '8.가위 바위 보 9.소수 구하기 10.윤년 알아보기')
+                     '8.가위 바위 보 9.소수 구하기 10.윤년 알아보기 11.골프게임  '
+                     '12.로또 13.은행 14. 구구단')
         if menu == '0':
             break
 
@@ -41,16 +42,18 @@ def main():
 
         elif menu =='9':
             q9 = Quiz09GetPrime(int(input('100이하의 숫자 입력')))
+            print(q9.getPrime())
 
         elif menu == '10':
             q10 = Quiz10LeapYear(int(input('년도입력')))
-            print(q10.getPrime())
+            print(q10.leapYear())
 
         elif menu == '11':
-            q11 = Quiz11NumberGolf()
+            q11 = Quiz11NumberGolf(int(input('1~100 사이 숫자 입력')))
+            print(q11.golf())
 
         elif menu == '12':
-            q12 = Quiz12Lotto
+            print(Quiz12Lotto.lotto())
 
         elif menu == '13':
             q13 = Quiz13Bank
@@ -172,26 +175,56 @@ class Quiz09GetPrime:
         self.num = num
 
     def getPrime(self):
-        pass
+        res = ""
+        for i in range(2, self.num):
+            count = 0
+            for j in range(2, i+1):
+                if i % j == 0:
+                    count += 1
+            if count == 1:
+                res += str(i) + "\t"
+        return res
 
 class Quiz10LeapYear:
     def __init__(self, year):
         self.year = year
 
-    def getPrime(self):
-        return '윤년 입니다.' if self.year % 4 == 0 and self.year % 100 != 0 or self.year % 400 == 0 else '평년 입니다.'
+    def leapYear(self):
+        y = self.year
+        return '윤년 입니다.' if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else '평년 입니다.'
 
 class Quiz11NumberGolf:
-    def __init__(self):
-        pass
+    def __init__(self, user):
+        self.user = user
+
+    def golf(self):
+        count = 0
+        num = myRandom(1, 100)
+        numEnter = self.user
+        while num != numEnter:
+            if numEnter > 100:
+                res = '잘못된 숫자 입니다.'
+            elif numEnter < num:
+                res = 'up'
+                count += 1
+            elif numEnter > num:
+                res = 'down'
+                count += 1
+            numEnter = int(input(res))
+        return f'정답입니다! {count}회 만에 맞췄어요!'
 
 class Quiz12Lotto:
-    def __init__(self):
-        pass
+    @staticmethod
+    def lotto():
+        return random.sample(range(1,46),6)
 
 class Quiz13Bank:
-    def __init__(self):
-        pass
+    def __init__(self, account):
+        self.account = account
+
+    def bank(self):
+        if self.account > 0:
+            res = ''
 
 class Quiz14Gugudan:
     def __init__(self):
