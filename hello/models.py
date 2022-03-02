@@ -56,10 +56,22 @@ def main():
             print(Quiz12Lotto.lotto())
 
         elif menu == '13':
-            q13 = Quiz13Bank
+            q13 = Quiz13Bank(input('이름: '), int(input('초기 금액: ')))
+            while 1 :
+                choice = input('0.종료 1.잔액 조회 2.입금 3.출금')
+                if choice == '0':
+                    break
+                elif choice == '1':
+                    print(q13.account)
+                elif choice == '2':
+                    print(q13.deposit(int(input('입금 금액: '))))
+                elif choice == '3':
+                    print(q13.withdraw(int(input('출금 금액: '))))
+                else:
+                    print('잘못된 입력입니다.')
 
         elif menu == '14':
-            q14 = Quiz14Gugudan
+            print(Quiz14Gugudan.gugudan())
         else:
             print('잘못 입력하셨습니다.')
 
@@ -90,18 +102,19 @@ class Quiz02Bmi:
         return self.weight * 10000 / self.height / self.height
 
     def res(self):
-        if Quiz02Bmi.bmiCheak() >= 35:
-            return '고도비반'
-        elif Quiz02Bmi.bmiCheak() >= 30:
-            return '중도 비만 (2단계 비만)'
-        elif Quiz02Bmi.bmiCheak() >= 25:
-            return '경도 비만 (1단계 비만)'
-        elif Quiz02Bmi.bmiCheak() >= 23:
-            return '과체중'
-        elif Quiz02Bmi.bmiCheak() >= 18.5:
-            return '정상'
+        if Quiz02Bmi.bmiCheak(self) >= 35:
+            res = '고도비반'
+        elif Quiz02Bmi.bmiCheak(self) >= 30:
+            res = '중도 비만 (2단계 비만)'
+        elif Quiz02Bmi.bmiCheak(self) >= 25:
+            res = '경도 비만 (1단계 비만)'
+        elif Quiz02Bmi.bmiCheak(self) >= 23:
+            res = '과체중'
+        elif Quiz02Bmi.bmiCheak(self) >= 18.5:
+            res = '정상'
         else:
-            return '저체중'
+            res = '저체중'
+        return res
 
 class Quiz03Grade:
     def __init__(self, name, kor, eng, math):
@@ -218,18 +231,30 @@ class Quiz12Lotto:
     def lotto():
         return random.sample(range(1,46),6)
 
-class Quiz13Bank:
-    def __init__(self, account):
+class Quiz13Bank: # 이름, 입금, 출금만 구현
+    def __init__(self, name, account):
+        self.name = name
         self.account = account
 
-    def bank(self):
-        if self.account > 0:
-            res = ''
+    def deposit(self, deposit):
+        self.account = self.account + deposit
+        return f'입금한 금액은{deposit}, 현재 잔액은 {self.account}입니다.'
 
-class Quiz14Gugudan:
-    def __init__(self):
-        pass
+    def withdraw(self, withdraw):
+        self.account = self.account - withdraw
+        return f'출금한 금액은{withdraw}, 현재 잔액은 {self.account}입니다.'
 
+class Quiz14Gugudan: # 책받침구구단
+    @staticmethod
+    def gugudan():
+        res = ""
+        for i in [2, 6]:
+            for j in range(1, 10):
+                for k in range(0, 4):
+                    res += f'{i + k} * {j} = {(i + k) * j}\t'
+                res += '\n'
+            res += '\n'
+        return res
 
 if __name__ == '__main__':
     main()
