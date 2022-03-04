@@ -26,15 +26,16 @@ class Quiz02Bmi:
     @staticmethod
     def res(member):
         this = member
-        if Quiz02Bmi.getBmi(this) >= 35:
+        getBmi = Quiz02Bmi.getBmi(this)
+        if getBmi >= 35:
             res = '고도 비반'
-        elif Quiz02Bmi.getBmi(this) >= 30:
+        elif getBmi >= 30:
             res = '중도 비만 (2단계 비만)'
-        elif Quiz02Bmi.getBmi(this) >= 25:
+        elif getBmi >= 25:
             res = '경도 비만 (1단계 비만)'
-        elif Quiz02Bmi.getBmi(this) >= 23:
+        elif getBmi >= 23:
             res = '과체중'
-        elif Quiz02Bmi.getBmi(this) >= 18.5:
+        elif getBmi >= 18.5:
             res = '정상'
         else:
             res = '저체중'
