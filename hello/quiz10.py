@@ -17,7 +17,13 @@ class Quiz10:
 
     def quiz15magic(self) -> str: return None
 
-    def quiz16zigzag(self) -> str: return None
+    def quiz16zigzag(self) -> str:
+        ran_num = myRandom(2, 11)
+        res = [[0]*ran_num for i in range(ran_num)]
+        count = 1
+
+
+        return None
 
     def quiz17prime(self) -> str:
         num = my100()
