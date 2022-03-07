@@ -9,7 +9,7 @@ class Quiz00:
         a = my100()
         b = my100()
         o = ['+', '-', '*', '/', '%']
-        ran_o = o[myRandom(0, 5)]
+        ran_o = o[myRandom(0, 4)]
         if ran_o == '+': res = a + b
         elif ran_o == '-': res = a - b
         elif ran_o == '*': res = a * b
@@ -53,9 +53,12 @@ class Quiz00:
         return None
 
     def quiz04leap(self):
-        y = myRandom(1, 2500)
-        leap = '윤년 입니다.' if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else '평년 입니다.'
-        print(f'{y}년은 {leap}')
+        y = myRandom(2000, 2022)
+        # java
+        # String s = () ? : ;
+        # String s = (y % 4 == 0 && y % 100 != 0) ? "윤년" : y % 400 == 0 ? "윤년" : "평년";
+        res = '윤년' if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else '평년'
+        print(f'{y}년은 {res}입니다.')
         return None
 
     def quiz05grade(self):
@@ -76,13 +79,7 @@ class Quiz00:
         return None
 
     def quiz08bank(self):
-        name = '최건일'
-        account = myRandom(100, 30000)
-        deposit = myRandom(100, 30000)
-        withdraw = myRandom(100, 30000)
-
-        print(f'{name}님의 잔액{account}원 입니다.')
-        return None
+        Account.main()
 
     def quiz09gugudan(self):  # 책받침구구단
         res = ""
@@ -94,4 +91,72 @@ class Quiz00:
             res += '\n'
         print(res)
         return None
+
+'''
+은행 이름은 비트은행
+입금자 이름(name), 계좌번호(account_number), 금액(money) 속성값으로 계좌를 생성한다.
+계좌번호는 3자리-2자리-6자리 형태로 랜덤하게 생성된다.
+ex ) 123-12-123456
+금액은 100만원 ~ 999만원 사이로 랜덤하게 입금된다.
+'''
+
+class Account(object):
+    def __init__(self, name, account_number, money):
+        self.BANK_NAME = '비트은행'
+        self.name = myMember() if name == None else name
+        # number = f'{myRandom(0, 99999999999):0>11}'
+        # self.account_number = f'{number[:3]}-{number[3:5]}-{number[5:]}'
+        self.account_number = Account.creat_account_number(self) if account_number == None else account_number
+        self.money = f'{myRandom(100, 999)}만원' if money == None else money
+
+    def to_string(self):
+        an = self.account_number
+        return f'은행: {self.BANK_NAME}, ' \
+               f'입금자: {self.name}, ' \
+               f'계좌번호: {self.account_number}, ' \
+               f'금액: {self.money}'
+
+    def creat_account_number(self):
+        # ls = [str(myRandom(1, 9)) for i in range(3)]
+        # ls += '-'
+        # ls += [str(myRandom(1, 9)) for i in range(2)]
+        # ls += '-'
+        # ls += [str(myRandom(1, 9)) for i in range(6)]
+        # return "".join(ls)
+        return "".join([str(myRandom(1, 9)) if i != 3 and i != 6 else '-' for i in range(13)])
+
+    def del_account(self, ls, account_number):
+        for i, j in enumerate(ls):
+            if j.account_number == account_number:
+                del ls[i]
+    @staticmethod
+    def main():
+        ls = []
+        while 1 :
+            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출급 5.계좌해지')
+            if menu == '0':
+                break
+            elif menu == '1':
+                acc = Account(None, None, None)
+                print(f'{acc.to_string()}... 개설되었습니다.')
+                ls.append(acc)
+            elif menu == '2':
+                print('\n'.join(i.to_string() for i in ls))
+            elif menu == '3':
+                account_number = input('입금할 계좌번호')
+                deposit = input('입금액')
+                for i, j in enumerate(ls):
+                    if j.account_number == account_number:
+                        pass
+            elif menu == '4':
+                account_number = input('출금할 계좌번호')
+                money = input('출금액')
+            elif menu == '5':
+                account_number = input('입금할 계좌번호')
+            else:
+                print('WRONG NUMBER... Try Again')
+
+
+
+
 
