@@ -19,9 +19,23 @@ class Quiz10:
 
     def quiz16zigzag(self) -> str:
         ran_num = myRandom(2, 11)
-        res = [[0]*ran_num for i in range(ran_num)]
-        count = 1
+        matrix = [[0]*ran_num for i in range(ran_num)]
+        count = 0
 
+        for i in range(ran_num):
+            if i % 2 == 1:
+                for j in range(ran_num - 1, -1, -1):
+                    count += 1
+                    matrix[i][j] = count
+            else:
+                for j in range(ran_num):
+                    count += 1
+                    matrix[i][j] = count
+
+        for i in range(ran_num):
+            for j in range(ran_num):
+                print(matrix[i][j], end='\t')
+            print()
 
         return None
 

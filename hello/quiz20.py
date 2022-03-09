@@ -111,9 +111,21 @@ class Quiz20:
 
         songs = soup.find_all('div', {'class': 'ellipsis rank01'})
         songs = [i.get_text() for i in songs]
-        print(songs)
+        # print(songs)
         songs = [i[1:-1] for i in songs]
-        print(songs[:5])
+        # print(songs)
+        songs = songs[:5]
+
+        artists = soup.find_all('span', {'class': 'checkEllipsis'})
+        # print(artists)
+        artists = [i.get_text() for i in artists]
+        # print(artists)
+        artists = [i for i in artists]
+        artists = artists[:5]
+
+        melon = dict(zip(songs, artists))
+        print(melon)
+
         return None
 
     def quiz28(self) -> str: return None
