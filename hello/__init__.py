@@ -4,12 +4,15 @@ from hello.quiz10 import Quiz10
 from hello.quiz20 import Quiz20
 from hello.quiz30 import Quiz30
 from hello.quiz40 import Quiz40
+from hello.quiz90 import Quiz90
+
 if __name__ == '__main__':
     q0 = Quiz00()
     q1 = Quiz10()
     q2 = Quiz20()
     q3 = Quiz30()
     q4 = Quiz40()
+    q9 = Quiz90()
     while 1:
         menu = input("00계산기 01Bmi 02주사위 03가위바위보 04윤년 05성적표 06멤버선택 07로또 08입출금 09구구단""\n"
                      "10버블 11삽입 12선택 13퀵 14병합 15매직 16지그재그 17소수 18골프 19예약""\n"
@@ -43,7 +46,7 @@ if __name__ == '__main__':
         elif menu == '25': q2.quiz25dictcom()
         elif menu == '26': q2.quiz26map()
         elif menu == '27': q2.quiz27melon()
-        elif menu == '28': q2.quiz28()
+        elif menu == '28': q2.quiz28dataframe()
         elif menu == '29': q2.quiz29()
         elif menu == '30': q3.quiz30()
         elif menu == '31': q3.quiz31()
@@ -65,6 +68,16 @@ if __name__ == '__main__':
         elif menu == '47': q4.quiz47()
         elif menu == '48': q4.quiz48()
         elif menu == '49': q4.quiz49()
+        elif menu == '90': q9.quiz90()
+        elif menu == '91': q9.quiz91()
+        elif menu == '92': q9.quiz92()
+        elif menu == '93': q9.quiz93()
+        elif menu == '94': q9.quiz94()
+        elif menu == '95': q9.quiz95()
+        elif menu == '96': q9.quiz96()
+        elif menu == '97': q9.quiz97()
+        elif menu == '98': q9.quiz98()
+        elif menu == '99': q9.quiz99()
         else: break
 
 

@@ -23,8 +23,8 @@ class Quiz10:
         count = 0
 
         for i in range(ran_num):
-            if i % 2 == 1:
-                for j in range(ran_num - 1, -1, -1):
+            if i % 2 == 1:                           # range(a, b, step) : a이상 b미만의 수를 step 간격으로 나열하는 수열
+                for j in range(ran_num - 1, -1, -1): # ran_num-1부터 0이하 까지 수를 -1간격(역순)으로 나열
                     count += 1
                     matrix[i][j] = count
             else:
@@ -32,6 +32,7 @@ class Quiz10:
                     count += 1
                     matrix[i][j] = count
 
+        print(f'랜덤숫자: {ran_num}')
         for i in range(ran_num):
             for j in range(ran_num):
                 print(matrix[i][j], end='\t')
