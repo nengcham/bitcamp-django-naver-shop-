@@ -70,9 +70,10 @@ class Quiz00:
         res = '합격' if avg >= 60 else '불합격'
         print(f'국어: {kor}, 영어: {eng}, 수학: {math}, 평균: {avg:.2f}, 결과: {res}')
 
-    def quiz06memberChoice(self):
-        print(myMember())
-        return None
+    @staticmethod
+    def quiz06memberChoice():
+
+        return myMember()
 
     def quiz07lotto(self):
         print(sorted(random.sample(range(1, 46), 6)))

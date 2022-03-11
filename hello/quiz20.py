@@ -1,9 +1,14 @@
 import random
+import string
 import urllib.request
 
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import pandas as pd
+from icecream import ic
+
+from hello.domains import myMember, myRandom
+from quiz00 import Quiz00
 
 
 class Quiz20:
@@ -99,11 +104,18 @@ class Quiz20:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         ls1 = self.crawling(url, 'title')
         ls2 = self.crawling(url, 'artist')
-        dict = {}
-        for i, j in zip(ls1, ls2):
-            dict[i] = j
-        print(dict)
-        return dict
+        # a = [i for i in range(1)]
+        # b = [i for i in []]
+        # c = [(i, j) in i, j enumerate([])]
+        # d = {i: j for i, j in zip(ls1, ls2)}
+
+        l1 = [i + j for i, j in zip(ls1, ls2)]
+        d1 = {i: j for i, j in zip(ls1, ls2)}
+        l2 = list(zip(ls1, ls2))
+        d2 = dict(zip(ls1, ls2))
+        print(d2)
+
+        return d2
 
     @staticmethod
     def dict2(ls1, ls2) -> None:
@@ -130,7 +142,21 @@ class Quiz20:
         return [i.get_text()[1:-1] for i in ls]
 
 
-    def quiz25dictcom(self) -> str: return None
+    def quiz25dictcom(self) -> {}:
+        # 랜덤5명, 랜덤점수
+        # students =[memberlist()[i] for i in random.sample(range(0, 23), 5)]
+        q = Quiz00()
+        students = [q.quiz06memberChoice() for i in range(5)]
+        while len(set(students)) != 5:
+            students.append(q.quiz06memberChoice())
+        students = list(set(students))
+        scores = [[myRandom(0, 100) for i in range(3)] for i in range(5)]
+        d1 = dict(zip(students, scores))
+        # df = pd.DataFrame(d1, index=['국어', '영어', '수학'])
+        # print(df)
+        # df.to_csv('./save/grade.csv', sep=',', na_rep='NaN')
+        ic(d1)
+        return d1
 
     def quiz26map(self) -> str: return None
 
@@ -161,14 +187,44 @@ class Quiz20:
 
     def quiz28dataframe(self) -> None:
 
-        # dict = self.quiz24zip()
+        dict = self.quiz24zip()
         # df = pd.DataFrame.from_dict(dict, orient='index')
         # print(df)
         # df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
 
+    '''
+    다음 결과 출력
+        a   b   c
+    1   1   3   5
+    2   2   4   6
+    '''
+    def quiz29_pandas_df(self) -> object:
+        # l1 = ['a', 'b', 'c']
+        # l2 = [[1, 2], [3, 4], [5, 6]]
+        # d1 = dict(zip(l1, l2))
+        # d2 = {"1": [1, 3, 5], "2": [2, 4, 6]}
 
-    def quiz29(self) -> str: return None
+        col = self.col(3)
+        d2 = dict(zip(self.idx(1, 3), self.num()))
 
+        df = pd.DataFrame.from_dict(d2, orient='index', columns=col)
+        print(df)
+        return None
+
+    @staticmethod
+    def num() -> []:
+        odd = []
+        even = []
+        [even.append(i) if i % 2 == 0 else odd.append(i) for i in range(1, 7)]
+        return [odd, even]
+
+    @staticmethod
+    def col(int) -> []:
+        return list(string.ascii_lowercase)[:int]
+
+    @staticmethod
+    def idx(start, end) -> []:
+        return [str(i) for i in range(start, end+1)]
 
 
