@@ -30,8 +30,8 @@ class Quiz30:
     '''
     def quiz31(self) -> str:
         ls = [[myRandom(10, 99) for i in range(3)] for i in range(2)]
-        idx = ['0', '1']
-        col = ['0', '1', '2']
+        idx = [str(i) for i in range(2)]
+        col = [str(i) for i in range(3)]
         df = pd.DataFrame(ls, index=idx, columns=col)
         ic(df)
         return None
@@ -54,7 +54,7 @@ class Quiz30:
                             GOJKU  62  17  75  49
         '''
     def quiz32_df_grade(self) -> str:
-        idx = [''.join([random.choice(string.ascii_letters) for i in range(5)]) for i in range(10)]
+        idx = [''.join(random.choice(string.ascii_letters) for i in range(5)) for i in range(10)]
         ls = [[myRandom(0, 100) for i in range(4)] for i in range(10)]
         col = ['국어', '영어', '수학', '사회']
         df = pd.DataFrame(ls, index=idx, columns=col)
