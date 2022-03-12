@@ -15,10 +15,10 @@ ic| df:     A   B   C
 '''
 class Quiz30:
     def quiz30_df_4_by_3(self) -> str:
-        ls = [[0+i, 1+i, 2+i] for i in range(1, 12, 3)]
+        ls = [[j+i for j in range(3)] for i in range(1, 12, 3)]
         col = list(string.ascii_uppercase)[:3]
         df = pd.DataFrame(ls, index=range(1, 5), columns=col)
-        ic(df)
+        # ic(df)
         return None
 
     '''
