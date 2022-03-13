@@ -28,7 +28,7 @@ class Quiz30:
             0  97  57  52
             1  56  83  80
     '''
-    def quiz31(self) -> str:
+    def quiz31_rand_2_by_3(self) -> str:
         ls = [[myRandom(10, 99) for i in range(3)] for i in range(2)]
         idx = [str(i) for i in range(2)]
         col = [str(i) for i in range(3)]
