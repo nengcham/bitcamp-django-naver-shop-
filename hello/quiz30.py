@@ -1,10 +1,12 @@
 import random
 import string
 
+import numpy as np
 import pandas as pd
+from titanic.models import Model
 from icecream import ic
 
-from domains import myRandom
+from domains import myRandom, memberlist
 
 '''
 ic| df:     A   B   C
@@ -16,9 +18,10 @@ ic| df:     A   B   C
 class Quiz30:
     def quiz30_df_4_by_3(self) -> str:
         ls = [[j+i for j in range(3)] for i in range(1, 12, 3)]
+        idx = range(1, 5)
         col = list(string.ascii_uppercase)[:3]
-        df = pd.DataFrame(ls, index=range(1, 5), columns=col)
-        # ic(df)
+        df = pd.DataFrame(ls, index=idx, columns=col)
+        ic(df)
         return None
 
     '''
@@ -29,11 +32,8 @@ class Quiz30:
             1  56  83  80
     '''
     def quiz31_rand_2_by_3(self) -> str:
-        ls = [[myRandom(10, 99) for i in range(3)] for i in range(2)]
-        idx = [str(i) for i in range(2)]
-        col = [str(i) for i in range(3)]
-        df = pd.DataFrame(ls, index=idx, columns=col)
-        ic(df)
+        # print(pd.DataFrame([[myRandom(10, 99) for i in range(3)] for i in range(2)]))
+        print(pd.DataFrame(np.random.randint(10, 99, size=(2, 3))))
         return None
 
     '''
@@ -53,15 +53,49 @@ class Quiz30:
                             PZOTP  94  78  79  96
                             GOJKU  62  17  75  49
         '''
+    @staticmethod
+    def id(chr_size) -> str: return ''.join(random.choice(string.ascii_letters) for i in range(chr_size))
+
     def quiz32_df_grade(self) -> str:
-        idx = [''.join(random.choice(string.ascii_letters) for i in range(5)) for i in range(10)]
-        ls = [[myRandom(0, 100) for i in range(4)] for i in range(10)]
+        data1 = np.random.randint(0, 100, (10, 4))
+        idx = [self.id(chr_size=5) for i in range(10)]
         col = ['국어', '영어', '수학', '사회']
-        df = pd.DataFrame(ls, index=idx, columns=col)
-        ic(df)
+        df1 = pd.DataFrame(data1, index=idx, columns=col)
+
+        ###############################
+        data2 = {i: j for i, j in zip(idx, data1)}
+        df2 = pd.DataFrame.from_dict(data2, orient = 'index', columns=col)
+
+        ic(df1)
+        ic(df2)
+
         return None
 
-    def quiz33(self) -> str: return None
+    @staticmethod
+    def create_df(keys, vals, len):
+        return pd.DataFrame([dict(zip(keys, vals)) for _ in range(len)])
+
+    def quiz33_df_loc(self) -> str:
+        # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
+
+        # df = self.create_df(keys=['a', 'b', 'c', 'd'],
+        #                     vals=np.random.randint(0, 100, 4),
+        #                     len=3)
+        # print(df)
+        # ic(df.iloc[0])
+
+        # subj = ['자바', '파이썬', 'JS', 'SQL']
+        # stud = memberlist()
+        # data = np.random.randint(0, 100, (len(stud), len(subj)))
+        # df = pd.DataFrame(data, index=stud, columns=subj)
+        # ic(df)
+        # df.to_csv('./save/grade.csv', sep=',', na_rep='NaN')
+
+        model = Model()
+        grade_df = model.new_model('grade.csv')
+        ic(grade_df)
+
+        return None
 
     def quiz34(self) -> str: return None
 
@@ -74,3 +108,5 @@ class Quiz30:
     def quiz38(self) -> str: return None
 
     def quiz39(self) -> str: return None
+
+

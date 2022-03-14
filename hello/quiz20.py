@@ -205,19 +205,22 @@ class Quiz20:
         # d1 = dict(zip(l1, l2))
         # d2 = {"1": [1, 3, 5], "2": [2, 4, 6]}
 
-        col = self.col(3)
-        d2 = dict(zip(self.idx(1, 3), self.num()))
+        # d1 = {"1": [1, 3, 5]}
+        # d2 = {"2": [2, 4, 6]}
+        # d3 = dict(d1, **d2)
 
-        df = pd.DataFrame.from_dict(d2, orient='index', columns=col)
+        col = self.col(3)
+        d1 = dict(zip(self.idx(1, 3), self.num()))
+        df = pd.DataFrame.from_dict(d1, orient='index', columns=col)
         print(df)
         return None
 
     @staticmethod
     def num() -> []:
-        odd = []
-        even = []
-        [even.append(i) if i % 2 == 0 else odd.append(i) for i in range(1, 7)]
-        return [odd, even]
+        odds = []
+        evens = []
+        [evens.append(i) if i % 2 == 0 else odds.append(i) for i in range(1, 7)]
+        return [odds, evens]
 
     @staticmethod
     def col(int) -> []:
