@@ -1,10 +1,11 @@
-# context, fname(파일명), train, test, id, label
+# context, fname, train, test, id, label
 from dataclasses import dataclass
 
 
 @dataclass
 class Dataset:
-    context: str
+    dname: str
+    sname: str
     fname: str
     train: str
     test: str
@@ -12,10 +13,16 @@ class Dataset:
     label: str
 
     @property
-    def context(self) -> str: return self._context
+    def dname(self) -> str : return self._dname
 
-    @context.setter
-    def context(self, context): self._context = context
+    @dname.setter
+    def dname(self, dname) : self._dname = dname
+
+    @property
+    def sname(self) -> str: return self._sname
+
+    @sname.setter
+    def sname(self, sname): self._sname = sname
 
     @property
     def fname(self) -> str: return self._fname
@@ -45,4 +52,4 @@ class Dataset:
     def label(self) -> str: return self._label
 
     @label.setter
-    def label(self, label): self._label = label
+    def label(self,label): self._label = label

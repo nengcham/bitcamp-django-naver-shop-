@@ -3,10 +3,10 @@ import string
 
 import numpy as np
 import pandas as pd
-from titanic.models import Model
+from context.models import Model
 from icecream import ic
 
-from domains import myRandom, memberlist
+from hello.domains import memberlist
 
 '''
 ic| df:     A   B   C
@@ -90,10 +90,26 @@ class Quiz30:
         # df = pd.DataFrame(data, index=stud, columns=subj)
         # ic(df)
         # df.to_csv('./save/grade.csv', sep=',', na_rep='NaN')
-
         model = Model()
+        # model.save_model(fname='grade.csv', dframe=df)
+
         grade_df = model.new_model('grade.csv')
-        ic(grade_df)
+
+        print('Q1. 파이썬의 점수만 출력하시오')
+        # python_scores = grade_df['파이썬']
+        python_scores = grade_df.loc[:, '파이썬']
+        ic(type(python_scores))
+        ic(python_scores)
+
+        print('Q2. 조현국의 점수만 출력하시오')
+        cho_scores = grade_df.loc['조현국']
+        ic(type(cho_scores))
+        ic(cho_scores)
+
+        print('Q2. 조현국의 과목별 점수를 출력하시오')
+        cho_subjects_scores = grade_df.loc[['조현국']]
+        ic(type(cho_subjects_scores))
+        ic(cho_subjects_scores)
 
         return None
 
