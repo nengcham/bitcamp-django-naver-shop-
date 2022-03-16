@@ -5,14 +5,15 @@ from titanic.views import TitanicView
 
 if __name__ == '__main__':
     while 1:
-        menu = input('1.템플릿 2.전처리')
+        menu = input('1.전처리 2.템플릿')
         if menu == '1':
-            print('##### 1.템플릿 #####')
-            template = TitanicTemplate(train_fname='train.csv', test_fname='test.csv')
+            print('##### 1.전처리 #####')
+            model = TitanicModel(train_fname='train.csv', test_fname='test.csv')
             break
         elif menu == '2':
-            print('##### 2.전처리 #####')
-            model = TitanicModel(train_fname='train.csv', test_fname='test.csv')
+            print('##### 2.템플릿 #####')
+            template = TitanicTemplate(fname='train.csv')
+            template.visualize()
             break
         else:
             break
