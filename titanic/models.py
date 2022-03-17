@@ -14,8 +14,8 @@ class TitanicModel(object):
         this.test = that.new_dframe(test_fname)
         this.id = this.test['PassengerId']
         this.label = this.train['Survived']
-        this.train = this.train.drop('Survived', axis=1)
         # Entity에서 Object로
+        this.train = this.train.drop('Survived', axis=1)
         this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
         # self.drop_feature('SibSp', 'Parch', 'Ticket', 'Cabin')
         # this = self.drop_feature(this.train, 'Survived')
@@ -49,11 +49,11 @@ class TitanicModel(object):
 
     @staticmethod
     def drop_feature(this, *feature) -> object:
-        # this = [f'this.{i} = this.{i}.drop({j}, axis=1)'for j in feature for i in ['train', 'test']]
-        for i in feature:
-            this.train = this.train.drop(i, axis=1)
-            this.test = this.test.drop(i, axis=1)
+        # for i in feature:
+        #     this.train = this.train.drop(i, axis=1)
+        #     this.test = this.test.drop(i, axis=1)
 
+        [i.drop(j, axis=1, inplace=True) for j in feature for i in [this.train, this.test]]
         return this
     '''
     Categorical vs Quantitative
