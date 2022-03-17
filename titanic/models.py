@@ -7,69 +7,79 @@ class TitanicModel(object):
     model = Model()
     dataset = Dataset()
 
-    def __init__(self, train_fname, test_fname):
-        self.train = self.model.new_model(train_fname)
-        self.test = self.model.new_model(test_fname)
-        # id 추출
-        ic(f'트레인 컬럼 {self.train.columns}')
-        ic(f'트레인 헤드 {self.train.head()}')
-        ic(self.train)
+    def preprocess(self, train_fname, test_fname) -> object:
+        this = self.dataset
+        that = self.model
+        this.train = that.new_dframe(train_fname)
+        this.test = that.new_dframe(test_fname)
+        this.id = this.test['PassengerId']
+        this.label = this.train['Survived']
+        this.train = this.train.drop('Survived', axis=1)
+        # Entity에서 Object로
+        this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
+        # self.drop_feature('SibSp', 'Parch', 'Ticket', 'Cabin')
+        # this = self.drop_feature(this.train, 'Survived')
 
-    def preprocess(self) -> object:
-        df = self.train
-        df = self.drop_feature(df)
-
-        df = self.name_nominal(df)
-        df = self.embarked_nominal(df)
-        df = self.pclass_ordinal(df)
-        df = self.fare_ratio(df)
-        df = self.sex_nominal(df)
-        df = self.age_ratio(df)
-
-        df = self.create_train(df)
-        df = self.create_label(df)
-        return df
-
-    @staticmethod
-    def create_label(df) -> object:
-        return df
+        # this = self.name_nominal(this)
+        # this = self.embarked_nominal(this)
+        # this = self.pclass_ordinal(this)
+        # this = self.fare_ratio(this)
+        # this = self.sex_nominal(this)
+        # this = self.age_ratio(this)
+        #
+        # this = self.create_train(this)
+        # this = self.create_label(this)
+        self.print_this(this)
+        return this
 
     @staticmethod
-    def create_train(df) -> object:
-        return df
+    def print_this(this):
+        print('*'*100)
+        ic(f'1. Train 의 타입: {type(this.train)}\n')
+        ic(f'2. Train 의 컬럼: {this.train.columns}\n')
+        ic(f'3. Train 의 상위1개: {this.train.head(1)}\n')
+        ic(f'4. Train 의 null의 개수: {this.train.isnull().sum()}\n')
+        ic(f'5. Test 의 타입: {type(this.test)}\n')
+        ic(f'6. Test 의 컬럼: {this.test.columns}\n')
+        ic(f'7. Test 의 상위1개: {this.test.head(1)}\n')
+        ic(f'8. Test 의 null의 개수: {this.test.isnull().sum()}\n')
+        ic(f'9. id 의 타입: {type(this.id)}\n')
+        ic(f'9. id 의 상위 10개: {this.id[:3]}\n')
+        print('*' * 100)
 
-    def drop_feature(self, df) -> object:
-        # for i in []:
-        # df = self.sibSp_garbage(df1)
-        # df = self.parch_garbage(df)
-        # df = self.ticket_garbage(df)
-        # df = self.cabin_garbage(df)
-        return df
+    @staticmethod
+    def drop_feature(this, *feature) -> object:
+        # this = [f'this.{i} = this.{i}.drop({j}, axis=1)'for j in feature for i in ['train', 'test']]
+        for i in feature:
+            this.train = this.train.drop(i, axis=1)
+            this.test = this.test.drop(i, axis=1)
+
+        return this
     '''
     Categorical vs Quantitative
     Cate -> nominal(이름) vs ordinal(순서)
     Quan -> interval(상대적) vs ratio(절대적)
     '''
     @staticmethod
-    def pclass_ordinal(df) -> object:
-        return df
+    def pclass_ordinal(this) -> object:
+        return this
 
     @staticmethod
-    def name_nominal(df) -> object:
-        return df
+    def name_nominal(this) -> object:
+        return this
 
     @staticmethod
-    def sex_nominal(df) -> object:
-        return df
+    def sex_nominal(this) -> object:
+        return this
 
     @staticmethod
-    def age_ratio(df) -> object:
-        return df
+    def age_ratio(this) -> object:
+        return this
 
     @staticmethod
-    def fare_ratio(df) -> object:
-        return df
+    def fare_ratio(this) -> object:
+        return this
 
     @staticmethod
-    def embarked_nominal(df) -> object:
-        return df
+    def embarked_nominal(this) -> object:
+        return this
