@@ -1,3 +1,5 @@
+import numpy as np
+import pandas as pd
 from icecream import ic
 from context.domains import Dataset
 from context.models import Model
@@ -10,6 +12,7 @@ class TitanicModel(object):
     def preprocess(self, train_fname, test_fname) -> object:
         this = self.dataset
         that = self.model
+        feature = ['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
         this.train = that.new_dframe(train_fname)
         this.test = that.new_dframe(test_fname)
         this.id = this.test['PassengerId']
@@ -17,69 +20,137 @@ class TitanicModel(object):
         # Entity에서 Object로
         this.train = this.train.drop('Survived', axis=1)
         this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
-        # self.drop_feature('SibSp', 'Parch', 'Ticket', 'Cabin')
-        # this = self.drop_feature(this.train, 'Survived')
 
-        # this = self.name_nominal(this)
-        # this = self.embarked_nominal(this)
+        this = self.extract_title_from_name(this)
+        title_mapping = self.remote_duplicate(this)
+        this = self.title_nominal(this, title_mapping)
+        this = self.drop_feature(this, 'Name')
+        this = self.sex_nominal(this)
+        this = self.drop_feature(this, 'Sex')
+        this = self.embarked_nominal(this)
+        this = self.age_ratio(this)
+        this = self.drop_feature(this, 'Age')
+
         # this = self.pclass_ordinal(this)
         # this = self.fare_ratio(this)
-        # this = self.sex_nominal(this)
-        # this = self.age_ratio(this)
-        #
-        # this = self.create_train(this)
-        # this = self.create_label(this)
-        self.print_this(this)
+
+        self.df_info(this)
         return this
 
     @staticmethod
-    def print_this(this):
-        print('*'*100)
-        ic(f'1. Train 의 타입: {type(this.train)}\n')
-        ic(f'2. Train 의 컬럼: {this.train.columns}\n')
-        ic(f'3. Train 의 상위1개: {this.train.head(1)}\n')
-        ic(f'4. Train 의 null의 개수: {this.train.isnull().sum()}\n')
-        ic(f'5. Test 의 타입: {type(this.test)}\n')
-        ic(f'6. Test 의 컬럼: {this.test.columns}\n')
-        ic(f'7. Test 의 상위1개: {this.test.head(1)}\n')
-        ic(f'8. Test 의 null의 개수: {this.test.isnull().sum()}\n')
-        ic(f'9. id 의 타입: {type(this.id)}\n')
-        ic(f'9. id 의 상위 10개: {this.id[:3]}\n')
-        print('*' * 100)
+    def df_info(this):
+        [ic(f'{i.info()}') for i in [this.train, this.test]]
+        ic(this.train.head(5))
+        ic(this.test.head(5))
+
+    @staticmethod
+    def null_check(this):
+        [ic(f'{i.isnull().sum()}') for i in [this.train, this.test]]
 
     @staticmethod
     def drop_feature(this, *feature) -> object:
-        # for i in feature:
-        #     this.train = this.train.drop(i, axis=1)
-        #     this.test = this.test.drop(i, axis=1)
+        # for i in [this.train, this.test]:
+        #     for j in feature:
+        #         i.drop(j, axis=1, inplace=True)
 
         [i.drop(j, axis=1, inplace=True) for j in feature for i in [this.train, this.test]]
         return this
+
+    @staticmethod
+    def kwargs_sample(**kwargs) -> None:            # self.kwargs_sample(key='value', key2='value2')
+        print(f'kwargs 타입: {type(kwargs)}')        # kwargs 타입: <class 'dict'>
+        print(kwargs)                               # {'key': 'value', 'key2': 'value2'}
+        [print(f'{i} is {j}') for i, j in kwargs.items()]
+
     '''
     Categorical vs Quantitative
     Cate -> nominal(이름) vs ordinal(순서)
     Quan -> interval(상대적) vs ratio(절대적)
     '''
+
     @staticmethod
-    def pclass_ordinal(this) -> object:
+    def extract_title_from_name(this) -> object:
+        combine = [this.train, this.test]
+        for dataset in combine:
+            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
         return this
 
     @staticmethod
-    def name_nominal(this) -> object:
+    def remote_duplicate(this) -> dict:
+        a = set()
+        # combine = [this.train, this.test]
+        # for dataset in combine:
+        #     a += list(set(dataset['Title']))
+
+        [a.update(set(dataset['Title'])) for dataset in [this.train, this.test]]
+        # ic(list(a))
+
+        '''
+        ['Mrs', 'Mme', 'Master', 'Don', 'Mr', 'Rev', 'Ms', 'Mlle', 'Miss', 'Dr', 
+        'Major', 'Col', 'Capt', 'Dona', 'Countess', 'Lady', 'Jonkheer', 'Sir']
+        
+        Royal : ['Countess', 'Lady', 'Sir']
+        Rare : ['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona', 'Mme']
+        Mr : ['Mlle']
+        Ms : ['Miss']
+        master
+        Mrs
+        '''
+        title_mapping = {'Mr': 1, 'Ms': 2, 'Mrs': 3, 'Master': 4, 'Royal': 5, 'Rare': 6}
+        return title_mapping
+
+    @staticmethod
+    def title_nominal(this, title_mapping) -> object:
+        combine = [this.train, this.test]
+        for these in combine:
+            these['Title'] = these['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
+            these['Title'] = these['Title'].replace(['Capt', 'Col', 'Don', 'Dr', 'Major', 'Rev', 'Jonkheer', 'Dona', 'Mme'], 'Rare')
+            these['Title'] = these['Title'].replace(['Mlle'], 'Mr')
+            these['Title'] = these['Title'].replace(['Miss'], 'Ms')
+            # Master, Mrs 는 변화없음
+            these['Title'] = these['Title'].fillna(0)
+            these['Title'] = these['Title'].map(title_mapping)
+            # print(dataset['Title'])
         return this
 
     @staticmethod
     def sex_nominal(this) -> object:
-        return this
-
-    @staticmethod
-    def age_ratio(this) -> object:
-        return this
-
-    @staticmethod
-    def fare_ratio(this) -> object:
+        gender_mapping = {'male': 0, 'female': 1}
+        for these in [this.train, this.test]:
+            these['Gender'] = these['Sex'].map(gender_mapping)
         return this
 
     @staticmethod
     def embarked_nominal(this) -> object:
+        embarked_mapping = {'S': 1, 'C': 2, 'Q': 3}
+        this.train = this.train.fillna({'Embarked': 'S'})
+        for these in [this.train, this.test]:
+            these['Embarked'] = these['Embarked'].map(embarked_mapping)
+        return this
+
+    @staticmethod
+    def age_ratio(this) -> object:
+        train = this.train
+        test = this.test
+        age_mapping = {'Unknown': 0, 'Baby': 1, 'Child': 2, 'Teenager': 3, 'Student': 4,
+                       'Young Adult': 5, 'Adult': 6,  'Senior': 7}
+        train['Age'] = train['Age'].fillna(-0.5)
+        test['Age'] = test['Age'].fillna(-0.5)
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
+        for these in train, test:
+            these['AgeGroup'] = pd.cut(these['Age'], bins, right=False, labels=labels)
+            these['AgeGroup'] = these['AgeGroup'].map(age_mapping)
+        return this
+
+    @staticmethod
+    def fare_ratio(this) -> object:
+        this.test['Fare'] = this.test['Fare'].fillna(1)
+        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
+        bins = [-1, 8, 15, 31, np.inf]
+        return this
+
+    @staticmethod
+    def pclass_ordinal(this) -> object:
         return this

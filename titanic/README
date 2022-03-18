@@ -75,3 +75,7 @@ ex)_ 나이, 돈, 몸무게 (10배 많다...가 가능)
 'Fare',    ratio     -> 티켓의 요금
 'Cabin',   (garbage) -> 객실 번호
 'Embarked' nominal   -> 승선한 항
+
+'Title' -> 'Capt', 'Col', 'Don', 'Dr', 'Major',
+'Rev', 'Jonkheer', 'Countess', 'Lady', 'Sir', 'Mile'
+'Ms', 'Miss', 'Dona', 'Mme'
