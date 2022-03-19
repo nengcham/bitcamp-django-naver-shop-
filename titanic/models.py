@@ -30,9 +30,9 @@ class TitanicModel(object):
         this = self.embarked_nominal(this)
         this = self.age_ratio(this)
         this = self.drop_feature(this, 'Age')
+        this = self.fare_ratio(this)
 
         # this = self.pclass_ordinal(this)
-        # this = self.fare_ratio(this)
 
         self.df_info(this)
         return this
@@ -149,6 +149,9 @@ class TitanicModel(object):
         this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
         bins = [-1, 8, 15, 31, np.inf]
+        labels = [0, 1, 2, 3]
+        for these in [this.train, this.test]:
+            these['Fare'] = pd.cut(these['Fare'], bins, right=False, labels=labels)
         return this
 
     @staticmethod
