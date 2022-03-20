@@ -12,7 +12,7 @@ class TitanicModel(object):
     def preprocess(self, train_fname, test_fname) -> object:
         this = self.dataset
         that = self.model
-        feature = ['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
+        # feature = ['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
         this.train = that.new_dframe(train_fname)
         this.test = that.new_dframe(test_fname)
         this.id = this.test['PassengerId']
@@ -40,8 +40,8 @@ class TitanicModel(object):
     @staticmethod
     def df_info(this):
         [ic(f'{i.info()}') for i in [this.train, this.test]]
-        ic(this.train.head(5))
-        ic(this.test.head(5))
+        ic(this.train.head(10))
+        ic(this.test.head(10))
 
     @staticmethod
     def null_check(this):
@@ -146,7 +146,7 @@ class TitanicModel(object):
     @staticmethod
     def fare_ratio(this) -> object:
         this.test['Fare'] = this.test['Fare'].fillna(1)
-        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
         bins = [-1, 8, 15, 31, np.inf]
         labels = [0, 1, 2, 3]
