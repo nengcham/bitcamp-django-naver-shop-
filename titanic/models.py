@@ -3,6 +3,9 @@ import pandas as pd
 from icecream import ic
 from context.domains import Dataset
 from context.models import Model
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 
 
 class TitanicModel(object):
@@ -20,7 +23,6 @@ class TitanicModel(object):
         # Entity에서 Object로
         this.train = this.train.drop('Survived', axis=1)
         this = self.drop_feature(this, 'SibSp', 'Parch', 'Ticket', 'Cabin')
-
         this = self.extract_title_from_name(this)
         title_mapping = self.remote_duplicate(this)
         this = self.title_nominal(this, title_mapping)
@@ -31,11 +33,27 @@ class TitanicModel(object):
         this = self.age_ratio(this)
         this = self.drop_feature(this, 'Age')
         this = self.fare_ratio(this)
+        this = self.drop_feature(this, 'Fare')
+        this = self.pclass_ordinal(this)
+        # self.df_info(this)
 
-        # this = self.pclass_ordinal(this)
-
-        self.df_info(this)
+        # k_fold = self.create_k_fold()
+        # accuracy = self.get_accuracy(this, k_fold)
+        # ic(accuracy)
         return this
+
+    def learning(self, train_fname, test_fname):
+        this = self.preprocess(train_fname, test_fname)
+        k_fold = self.create_k_fold()
+        ic(f'사이킷런 알고리즘 정확도: {self.get_accuracy(this, k_fold)}')
+        self.submit(this)
+
+    @staticmethod
+    def submit(this):
+        clf = RandomForestClassifier()
+        clf.fit(this.train, this.label)
+        prediction = clf.predict(this.test)
+        pd.DataFrame({'PassengerId': this.id, 'Survived': prediction}).to_csv('./save/submission.csv', index=False)
 
     @staticmethod
     def df_info(this):
@@ -136,10 +154,10 @@ class TitanicModel(object):
                        'Young Adult': 5, 'Adult': 6,  'Senior': 7}
         train['Age'] = train['Age'].fillna(-0.5)
         test['Age'] = test['Age'].fillna(-0.5)
-        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        bins = [-1, 0, 5, 12, 18, 24, 35, 55, np.inf]
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
         for these in train, test:
-            these['AgeGroup'] = pd.cut(these['Age'], bins, right=False, labels=labels)
+            these['AgeGroup'] = pd.cut(these['Age'], bins=bins, right=False, labels=labels)
             these['AgeGroup'] = these['AgeGroup'].map(age_mapping)
         return this
 
@@ -148,12 +166,23 @@ class TitanicModel(object):
         this.test['Fare'] = this.test['Fare'].fillna(1)
         # this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
-        bins = [-1, 8, 15, 31, np.inf]
-        labels = [0, 1, 2, 3]
+        bins = [-1, 8, 16, 31, np.inf]
+        labels = [1, 2, 3, 4]
         for these in [this.train, this.test]:
-            these['Fare'] = pd.cut(these['Fare'], bins, right=False, labels=labels)
+            these['FareBand'] = pd.cut(these['Fare'], bins, right=False, labels=labels)
         return this
 
     @staticmethod
     def pclass_ordinal(this) -> object:
         return this
+
+    @staticmethod
+    def create_k_fold() -> object:
+        return KFold(n_splits=10, shuffle=True, random_state=0)
+
+    @staticmethod
+    def get_accuracy(this, k_fold):
+        score = cross_val_score(RandomForestClassifier(), this.train, this.label,
+                                cv=k_fold, n_jobs=1, scoring='accuracy')
+        return round(np.mean(score)*100, 2)
+
