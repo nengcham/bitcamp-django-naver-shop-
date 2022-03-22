@@ -35,6 +35,7 @@ class TitanicModel(object):
         this = self.fare_ratio(this)
         this = self.drop_feature(this, 'Fare')
         this = self.pclass_ordinal(this)
+        
         # self.df_info(this)
 
         # k_fold = self.create_k_fold()
@@ -166,7 +167,7 @@ class TitanicModel(object):
         this.test['Fare'] = this.test['Fare'].fillna(1)
         # this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
         # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
-        bins = [-1, 8, 16, 31, np.inf]
+        bins = [-1, 8, 18, 31, np.inf]
         labels = [1, 2, 3, 4]
         for these in [this.train, this.test]:
             these['FareBand'] = pd.cut(these['Fare'], bins, right=False, labels=labels)
