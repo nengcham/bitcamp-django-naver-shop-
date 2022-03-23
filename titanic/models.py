@@ -35,12 +35,11 @@ class TitanicModel(object):
         this = self.fare_ratio(this)
         this = self.drop_feature(this, 'Fare')
         this = self.pclass_ordinal(this)
-        
-        # self.df_info(this)
 
         # k_fold = self.create_k_fold()
         # accuracy = self.get_accuracy(this, k_fold)
         # ic(accuracy)
+        # self.df_info(this)
         return this
 
     def learning(self, train_fname, test_fname):
@@ -82,9 +81,11 @@ class TitanicModel(object):
         [print(f'{i} is {j}') for i, j in kwargs.items()]
 
     '''
+    
     Categorical vs Quantitative
     Cate -> nominal(이름) vs ordinal(순서)
     Quan -> interval(상대적) vs ratio(절대적)
+    
     '''
 
     @staticmethod
@@ -105,6 +106,7 @@ class TitanicModel(object):
         # ic(list(a))
 
         '''
+        
         ['Mrs', 'Mme', 'Master', 'Don', 'Mr', 'Rev', 'Ms', 'Mlle', 'Miss', 'Dr', 
         'Major', 'Col', 'Capt', 'Dona', 'Countess', 'Lady', 'Jonkheer', 'Sir']
         
@@ -114,6 +116,7 @@ class TitanicModel(object):
         Ms : ['Miss']
         master
         Mrs
+        
         '''
         title_mapping = {'Mr': 1, 'Ms': 2, 'Mrs': 3, 'Master': 4, 'Royal': 5, 'Rare': 6}
         return title_mapping
