@@ -199,6 +199,7 @@ class Quiz20:
     1   1   3   5
     2   2   4   6
     '''
+
     def quiz29_pandas_df(self) -> object:
         # l1 = ['a', 'b', 'c']
         # l2 = [[1, 2], [3, 4], [5, 6]]
