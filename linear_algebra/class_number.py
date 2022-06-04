@@ -1,6 +1,5 @@
 from matplotlib import rc, font_manager
 rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/malgunsl.ttf').get_name())
-
 from matplotlib import pyplot as plt
 from sklearn.datasets import load_digits
 

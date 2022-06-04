@@ -1,6 +1,5 @@
 from matplotlib import pyplot as plt
 from scipy import misc
-
 from matplotlib import rc, font_manager
 rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/malgunsl.ttf').get_name())
 
@@ -32,6 +31,7 @@ class Raccoon:
 
         plt.show()
         pass
+
 
 if __name__ == '__main__':
     Raccoon.solution()
