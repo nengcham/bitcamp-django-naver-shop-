@@ -55,7 +55,7 @@ class Dataset:
     def label(self) -> str: return self._label
 
     @label.setter
-    def label(self,label): self._label = label
+    def label(self, label): self._label = label
 
 
 @dataclass
@@ -108,7 +108,8 @@ class ReaderBase(metaclass=ABCMeta):
 
 
 class Printer(PrinterBase):
-    def dframe(self, this):
+    @staticmethod
+    def dframe(this):
         print('*' * 100)
         print(f'1. Target type \n {type(this)} ')
         print(f'2. Target column \n {this.columns} ')
@@ -122,16 +123,17 @@ class Reader(ReaderBase):
     def new_file(self, file) -> str:
         return file.context + file.fname
 
-    def csv(self, fname) -> object:
-        return pd.read_csv(f'{self.new_file(fname)}.csv', encoding='UTF-8', thousands=',')
+    def csv(self, file) -> object:
+        return pd.read_csv(f'{self.new_file(file)}.csv', encoding='UTF-8', thousands=',')
 
-    def xls(self, fname, header, cols) -> object:
-        return pd.read_excel(f'{self.new_file(fname)}.xls', engine='openpyxl', header=header, usecols=cols)
+    def xls(self, file, header, cols, skiprows) -> object:
+        return pd.read_excel(f'{self.new_file(file)}.xls', header=header, usecols=cols, skiprows=skiprows)
 
-    def json(self, fname) -> object:
-        return pd.read_json(f'{self.new_file(fname)}.json', encoding='UTF-8')
+    def json(self, file) -> object:
+        return pd.read_json(f'{self.new_file(file)}.json', encoding='UTF-8')
 
-    def gmaps(self) -> object:
+    @staticmethod
+    def gmaps():
         return googlemaps.Client(key='')
 
 if __name__ == '__main__':
