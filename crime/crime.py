@@ -69,7 +69,6 @@ class Solution(Reader):
                 'types': ['establishment', 'point_of_interest', 'police']}]
             print(f'name {i} = {temp[0].get("formatted_address")}')
 
-
     def save_cctv_pos(self):
         file = self.file
         file.fname = 'cctv_in_seoul'

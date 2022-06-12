@@ -136,5 +136,6 @@ class Reader(ReaderBase):
     def gmaps():
         return googlemaps.Client(key='')
 
+
 if __name__ == '__main__':
     r = Reader()
